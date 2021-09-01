@@ -58,7 +58,8 @@ public class SimpleClient {
 		
 		os.write(bytes);
 	}
-	
+
+
 	public String receiveMessage() throws Exception {
 		byte[] buffer = new byte[1024];
 		int length = is.read(buffer);
@@ -68,14 +69,18 @@ public class SimpleClient {
 	
 	public void processUserInput() throws Exception {
 		scanner = new Scanner(System.in);
-		String message = null;
+		int value1;
+		int value2;
 		
 		while (true) {
-			message = scanner.nextLine();
+			value1 = scanner.nextInt();
+			value2 = scanner.nextInt();
 			
-			if ("quit".equals(message)) {
+			if (value1 == 0 && value2 == 0) {
 				break;
 			}
+			
+			String message = String.format("%d,%d", value1, value2);
 			
 			sendMessage(message);
 			

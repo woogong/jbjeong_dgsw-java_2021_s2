@@ -38,10 +38,16 @@ public class SimpleServer {
 			while (true) {
 				int length = is.read(bytes);
 				
-				//String message = new String(bytes, 0, length);
-				//System.out.println("클라이언트 메시지 : " + message);
+				String message = new String(bytes, 0, length);
+				int index = message.indexOf(",");
+				String sValue1 = message.substring(0, index);
+				String sValue2 = message.substring(index + 1);
+				int value1 = Integer.parseInt(sValue1);
+				int value2 = Integer.parseInt(sValue2);
 				
-				os.write(bytes, 0, length);
+				int sum = value1 + value2;
+				
+				os.write((sum + "").getBytes());
 			}
 			
 			
