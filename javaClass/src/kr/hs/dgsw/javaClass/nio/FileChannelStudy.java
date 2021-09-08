@@ -4,22 +4,69 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.nio.file.CopyOption;
+import java.nio.file.FileSystem;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class FileChannelStudy {
 
 	public static void main(String[] args) {
 		try {
 			//studyWrite();
-			studyRead();
+			//studyRead();
+			copy2();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void copy() throws Exception {
+		Path src = Paths.get("C:\\study\\nio", "农氛.jfif");
+		Path target = Paths.get("C:\\study\\nio", "农氛_copy.jfif");
+
+		FileChannel srcChannel =
+				FileChannel.open(src, StandardOpenOption.READ);
+		
+		FileChannel targetChannel = 
+				FileChannel.open(target, 
+						StandardOpenOption.CREATE,
+						StandardOpenOption.WRITE);
+		
+		ByteBuffer buffer = ByteBuffer.allocateDirect(100);
+		
+		while (true) {
+			int count = srcChannel.read(buffer);
+			
+			if (count < 0) {
+				break;
+			}
+			
+			buffer.flip();
+			
+			targetChannel.write(buffer);
+			
+			buffer.clear();
+		}
+		
+		
+		targetChannel.close();
+		srcChannel.close();
+	}
+	
+	public static void copy2() throws Exception {
+		Path src = Paths.get("C:\\study\\nio", "农氛.jfif");
+		Path target = Paths.get("C:\\study\\nio", "农氛_copy2.jfif");
+
+		Files.copy(src, target, 
+				StandardCopyOption.REPLACE_EXISTING);
 	}
 	
 	public static void studyWrite() throws Exception {
@@ -47,6 +94,7 @@ public class FileChannelStudy {
 		ByteBuffer buffer = ByteBuffer.allocate(5);
 		byte[] bytes = new byte[5];
 		String data = "";
+		byte[] all = new byte[0];
 		
 		while (true) {
 			int count = channel.read(buffer);
@@ -58,13 +106,25 @@ public class FileChannelStudy {
 			buffer.flip();
 			buffer.get(bytes, 0, count);
 			
-			data += new String(bytes, 0, count, "UTF-8");
+			all = concatArray(all, Arrays.copyOf(bytes, count));
+			
+			//data += new String(bytes, 0, count, "UTF-8");
 			
 			buffer.clear();
 		}
 		
+		data = new String(all, "UTF-8"); 
+		
 		channel.close();
 		System.out.println("data : " + data);
+	}
+	
+	public static byte[] concatArray(byte[] one, byte[] other) {
+		byte[] result = new byte[one.length + other.length];
+		System.arraycopy(one, 0, result, 0, one.length);
+		System.arraycopy(other, 0, result, one.length, other.length);
+		
+		return result;
 	}
 	
 	public static void printStatus(Buffer buffer, String note) {
