@@ -1,4 +1,5 @@
 bin
 .settings
-/javaClass/.classpath
-/javaClass/.project
+/**/.classpath
+/**/.project
+/**/build
