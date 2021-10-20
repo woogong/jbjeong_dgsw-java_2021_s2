@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kr.hs.dgsw.java.web.service.CookieSessionManager;
 import kr.hs.dgsw.java.web.service.SessionManager;
+import kr.hs.dgsw.java.web.service.SessionManagerMaker;
 
 @WebServlet("/logout.do")
 public class LogoutServlet extends HttpServlet {
@@ -18,7 +18,7 @@ public class LogoutServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 
-		SessionManager sessionManager = new CookieSessionManager();
+		SessionManager sessionManager = SessionManagerMaker.make();
 		sessionManager.doLogout(request, response);
 		
 		response.sendRedirect("login.jsp");

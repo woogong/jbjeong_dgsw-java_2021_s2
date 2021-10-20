@@ -1,10 +1,10 @@
-<%@page import="kr.hs.dgsw.java.web.service.CookieSessionManager"%>
+<%@page import="kr.hs.dgsw.java.web.service.SessionManagerMaker"%>
 <%@page import="kr.hs.dgsw.java.web.service.SessionManager"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
 <%
-	SessionManager sessionManager = new CookieSessionManager();
+	SessionManager sessionManager = SessionManagerMaker.make();
 	
 	if (!sessionManager.isAuthorized(request)) {
 		response.sendRedirect("login.jsp");

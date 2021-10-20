@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import kr.hs.dgsw.java.web.service.CookieSessionManager;
 import kr.hs.dgsw.java.web.service.SessionManager;
+import kr.hs.dgsw.java.web.service.SessionManagerMaker;
 
 @WebServlet("/login.do")
 public class LoginServlet extends HttpServlet {
@@ -23,7 +24,7 @@ public class LoginServlet extends HttpServlet {
 		
 		// 아이디 비밀번호 검증 완료
 		
-		SessionManager sessionManager = new CookieSessionManager();
+		SessionManager sessionManager = SessionManagerMaker.make();
 		sessionManager.doLogin(request, response, id);
 		
 		response.sendRedirect("work.jsp");
