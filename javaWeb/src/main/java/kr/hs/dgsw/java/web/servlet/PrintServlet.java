@@ -18,13 +18,13 @@ public class PrintServlet extends HttpServlet {
 		String gender = request.getParameter("gender");
 		String age = request.getParameter("age");
 		
-		System.out.println("ÀÌ¸§ : " + name);
-		System.out.println("¼ºº° : " + gender);
-		System.out.println("³ªÀÌ : " + age);
+		System.out.println("ì„±ëª… : " + name);
+		System.out.println("ì„±ë³„ : " + gender);
+		System.out.println("ë‚˜ì´ : " + age);
 		
 		response.setCharacterEncoding("EUC-KR");
 		
-		response.getWriter().append("±¸ÇöÁß");
+		response.getWriter().append("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

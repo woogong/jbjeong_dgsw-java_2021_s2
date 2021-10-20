@@ -22,7 +22,7 @@ public class MultiplicationTableServelt extends HttpServlet {
 			result = makeTable(dan);
 			
 		} catch (Exception e) {
-			result = "Àß¸øµÈ ÀÔ·Â°ªÀÔ´Ï´Ù. ¸ÛÃæ¾Æ.";
+			result = "ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½Ô·Â°ï¿½ï¿½Ô´Ï´ï¿½. ï¿½ï¿½ï¿½ï¿½ï¿½.";
 		}
 
 		response.getWriter().append(result);
@@ -31,8 +31,8 @@ public class MultiplicationTableServelt extends HttpServlet {
 	private String makeTable(int dan) {
 		StringBuilder buffer = new StringBuilder();
 		
-		buffer.append("<h1>±¸±¸´Ü</h1>");
-		buffer.append("<h3>").append(dan).append("´Ü</h3>");
+		buffer.append("<h1>êµ¬êµ¬ë‹¨</h1>");
+		buffer.append("<h3>").append(dan).append("ë‹¨</h3>");
 		
 		for (int i = 1 ; i<= 9 ; i++) {
 			buffer.append(dan).append(" * ").append(i)
