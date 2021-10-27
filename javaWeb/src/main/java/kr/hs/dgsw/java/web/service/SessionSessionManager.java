@@ -16,6 +16,7 @@ public class SessionSessionManager implements SessionManager {
 	@Override
 	public String getId(HttpServletRequest request) {
 		HttpSession session = request.getSession();
+		System.out.println(" servlet : "+ session.getId());
 		
 		return (String)session.getAttribute(SESSION_NAME);
 	}

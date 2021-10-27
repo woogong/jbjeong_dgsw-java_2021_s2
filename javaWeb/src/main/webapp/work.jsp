@@ -9,6 +9,7 @@
 	if (!sessionManager.isAuthorized(request)) {
 		response.sendRedirect("login.jsp");
 	}
+	
 %>
     
 <!DOCTYPE html>
@@ -19,6 +20,6 @@
 </head>
 <body>
 	님의 아이디는 <strong><%= sessionManager.getId(request) %></strong>입니다. <br>
-	<a href="logout.do">로그아웃</a>
+	<a href="logout.do">로그아웃</a>  <%= session.getId() %>
 </body>
 </html>
