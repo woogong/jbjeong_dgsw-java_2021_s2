@@ -1,5 +1,7 @@
 package kr.hs.dgsw.java.web.domain;
 
+import java.util.Calendar;
+
 public class Member {
 	private int memberIdx;
 	
@@ -70,4 +72,19 @@ public class Member {
 	public void setRegisterTime(String registerTime) {
 		this.registerTime = registerTime;
 	}
+	
+	public int getAge() {
+		if (birthday == null) {
+			return -1;
+		}
+		
+		String sYear = birthday.substring(0, 4);
+		int year = Integer.parseInt(sYear);
+		
+		Calendar calendar = Calendar.getInstance();
+		int thisYear = calendar.get(Calendar.YEAR);
+		
+		return thisYear - year + 1;
+	}
+	
 }

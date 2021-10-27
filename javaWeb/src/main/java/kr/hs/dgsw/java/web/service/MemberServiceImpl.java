@@ -1,10 +1,12 @@
 package kr.hs.dgsw.java.web.service;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import kr.hs.dgsw.java.web.domain.Member;
 
@@ -14,10 +16,7 @@ public class MemberServiceImpl implements MemberService {
 	public void registerMember(Member member) {
 		try {
 			// 데이터베이스 연결
-			Class.forName("org.mariadb.jdbc.Driver");
-			Connection con = 
-					DriverManager.getConnection("jdbc:mariadb://211.53.209.159:3306/dgsw2021", 
-							"dgsw", "1111");
+			Connection con = ConnectionManager.getConnection();
 			
 			// SQL 작성
 			StringBuilder sql = new StringBuilder();
@@ -53,17 +52,96 @@ public class MemberServiceImpl implements MemberService {
 		
 	}
 	
+	@Override
+	public boolean isEmailDuplicated(String email) {
+		
+		try {
+			// 데이터베이스 연결
+			Connection con = ConnectionManager.getConnection();
+			
+			// SQL 생성
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT COUNT(*) ");
+			sql.append("  FROM member ");
+			sql.append(" WHERE email = ? ");
+			
+			// Query
+			PreparedStatement pstmt = con.prepareStatement(sql.toString());
+			pstmt.setString(1, email);
+			
+			ResultSet rs = pstmt.executeQuery();
+			rs.next();
+			int count = rs.getInt(1);
+			
+			rs.close();
+			pstmt.close();
+			
+			// 데이터베이스 연결 해제
+			con.close();
+			
+			return (count > 0);
+			
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+	
+	@Override
+	public List<Member> getList() {
+		try {
+			Connection con = ConnectionManager.getConnection();
+			
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT ");
+			sql.append("	email, ");
+			sql.append("	name, ");
+			sql.append("	contact, ");
+			sql.append("	birthday, ");
+			sql.append("	register_time ");
+			sql.append("  FROM member ");
+			sql.append(" ORDER BY register_time ");
+
+			PreparedStatement pstmt = con.prepareStatement(sql.toString());
+			
+			List<Member> memberList = new ArrayList<Member>();
+			
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Member member = new Member();
+				member.setEmail(rs.getString("email"));
+				member.setName(rs.getString("name"));
+				member.setContact(rs.getString("contact"));
+				
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				Date birthday = rs.getDate("birthday");
+				member.setBirthday(dateFormat.format(birthday));
+				
+				Date registerTime = rs.getTimestamp("register_time");
+				member.setRegisterTime(dateFormat.format(registerTime));
+				
+				memberList.add(member);
+			}
+			rs.close();
+			pstmt.close();
+			
+			con.close();
+			
+			return memberList;
+			
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+	
+	
+	
 	public static void main(String[] args) {
 		try {
 			MemberService memberService = new MemberServiceImpl();
-			Member member = new Member();
-			member.setEmail("abcd@gmail.zzz");
-			member.setPassword("123455");
-			member.setName("테스트회원");
-			member.setContact("010-0000-1111");
-			member.setBirthday("2035-04-25");
 			
-			memberService.registerMember(member);
+			boolean result = memberService.isEmailDuplicated("asdgasdgqw32asgas");
+			System.out.println(result);
+			
 			
 		} catch (Exception e) {
 			e.printStackTrace();

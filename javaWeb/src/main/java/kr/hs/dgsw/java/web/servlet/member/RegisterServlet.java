@@ -1,6 +1,8 @@
 package kr.hs.dgsw.java.web.servlet.member;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,6 +23,15 @@ public class RegisterServlet extends HttpServlet {
 		try {
 			MemberService memberService = new MemberServiceImpl();
 			
+			// 아이디 중복 여부를 검사한다.
+			if (memberService.isEmailDuplicated(request.getParameter("email"))) {
+				String url = "registerFail.jsp?reason=" + URLEncoder.encode("이미 사용 중인 아이디입니다.", "UTF-8");
+				
+				response.sendRedirect(url);
+				return;
+			}
+			
+			// 데이터베이스에 등록한다.
 			Member member = new Member();
 			member.setEmail(request.getParameter("email"));
 			member.setPassword(request.getParameter("password"));
@@ -34,7 +45,7 @@ public class RegisterServlet extends HttpServlet {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			response.sendRedirect("registerFail.html");
+			response.sendRedirect(URLEncoder.encode("registerFail.jsp?reason=" + e.getMessage(), "UTF-8"));
 		}
 	}
 
