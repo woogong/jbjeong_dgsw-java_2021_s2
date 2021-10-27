@@ -69,7 +69,7 @@
 		for (Member member: memberList) {
 %>
 			<tr>
-				<td><%= member.getEmail() %></td>
+				<td><a href="update.jsp?memberIdx=<%= member.getMemberIdx() %>"><%= member.getEmail() %></a></td>
 				<td><%= member.getName() %></td>
 				<td><%= member.getContact() %></td>
 				<td><%= member.getAge() %>세</td>

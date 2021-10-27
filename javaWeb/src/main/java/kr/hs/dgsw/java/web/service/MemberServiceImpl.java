@@ -93,6 +93,7 @@ public class MemberServiceImpl implements MemberService {
 			
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT ");
+			sql.append("	member_idx, ");
 			sql.append("	email, ");
 			sql.append("	name, ");
 			sql.append("	contact, ");
@@ -108,6 +109,7 @@ public class MemberServiceImpl implements MemberService {
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				Member member = new Member();
+				member.setMemberIdx(rs.getInt("member_idx"));
 				member.setEmail(rs.getString("email"));
 				member.setName(rs.getString("name"));
 				member.setContact(rs.getString("contact"));
@@ -133,14 +135,99 @@ public class MemberServiceImpl implements MemberService {
 		}
 	}
 	
+	@Override
+	public Member getMember(int memberIdx) {
+		try {
+			Connection con = ConnectionManager.getConnection();
+			
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT ");
+			sql.append("	member_idx, ");
+			sql.append("	email, ");
+			sql.append("	name, ");
+			sql.append("	contact, ");
+			sql.append("	birthday, ");
+			sql.append("	register_time ");
+			sql.append("  FROM member ");
+			sql.append(" WHERE member_idx = ? ");
+
+			PreparedStatement pstmt = con.prepareStatement(sql.toString());
+			pstmt.setInt(1, memberIdx);
+			
+			Member member = null;
+			
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				member = new Member();
+				member.setMemberIdx(rs.getInt("member_idx"));
+				member.setEmail(rs.getString("email"));
+				member.setName(rs.getString("name"));
+				member.setContact(rs.getString("contact"));
+				
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				Date birthday = rs.getDate("birthday");
+				member.setBirthday(dateFormat.format(birthday));
+				
+				Date registerTime = rs.getTimestamp("register_time");
+				member.setRegisterTime(dateFormat.format(registerTime));
+			}
+			rs.close();
+			pstmt.close();
+			
+			con.close();
+			
+			return member;
+			
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
 	
+	@Override
+	public void updateMember(Member member) {
+		try {
+			// 데이터베이스 연결
+			Connection con = ConnectionManager.getConnection();
+			
+			// SQL 작성
+			StringBuilder sql = new StringBuilder();
+			sql.append("UPDATE member SET ");
+			sql.append("	name = ?, ");
+			sql.append("	contact = ?, ");
+			sql.append("	birthday = ? ");
+			sql.append(" WHERE member_idx = ? ");
+			
+			
+			// PreparedStatment 생성, 수행
+			PreparedStatement pstmt = con.prepareStatement(sql.toString());
+			pstmt.setString(1, member.getName());
+			pstmt.setString(2, member.getContact());
+			
+			String sBirthday = member.getBirthday();
+			SimpleDateFormat dateFormat = 
+					new SimpleDateFormat("yyyy-MM-dd");
+			Date birthday = dateFormat.parse(sBirthday);
+			pstmt.setDate(3, new java.sql.Date(birthday.getTime()));
+			
+			pstmt.setInt(4, member.getMemberIdx());
+			
+			pstmt.executeUpdate();
+			
+			// 데이터베이스 연결 종료
+			con.close();
+			
+		} catch (Exception e) {
+			throw new RuntimeException("회원 정보 변경 실패", e);
+		}
+		
+	}
 	
 	public static void main(String[] args) {
 		try {
 			MemberService memberService = new MemberServiceImpl();
 			
-			boolean result = memberService.isEmailDuplicated("asdgasdgqw32asgas");
-			System.out.println(result);
+			Member member = memberService.getMember(19);
+			System.out.println(member.getName());
 			
 			
 		} catch (Exception e) {

@@ -12,4 +12,8 @@ public interface MemberService {
 	
 	public List<Member> getList();
 	
+	public Member getMember(int memberIdx);
+	
+	public void updateMember(Member member);
+	
 }
