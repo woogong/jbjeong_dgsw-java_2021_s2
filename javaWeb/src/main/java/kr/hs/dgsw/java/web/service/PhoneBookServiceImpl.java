@@ -3,6 +3,7 @@ package kr.hs.dgsw.java.web.service;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -61,20 +62,84 @@ public class PhoneBookServiceImpl implements PhoneBookService {
 
 	@Override
 	public void update(PhoneNumber phoneNumber) {
-		// TODO Auto-generated method stub
-		
+		try {
+			Connection con = ConnectionManager.getConnection();
+			
+			StringBuilder sql = new StringBuilder();
+			sql.append("UPDATE phonebook SET  ");
+			sql.append("	name = ?,  ");
+			sql.append("	phone_number = ?  ");
+			sql.append(" WHERE idx = ? ");
+
+			PreparedStatement pstmt = con.prepareStatement(sql.toString());
+			pstmt.setString(1, phoneNumber.getName());
+			pstmt.setString(2, phoneNumber.getPhoneNumber());
+			pstmt.setInt(3, phoneNumber.getIdx());
+			
+			pstmt.executeUpdate();
+			
+			pstmt.close();
+			con.close();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
 	public void delete(int idx) {
-		// TODO Auto-generated method stub
-		
+		try {
+			Connection con = ConnectionManager.getConnection();
+			
+			StringBuilder sql = new StringBuilder();
+			sql.append("DELETE FROM phonebook  ");
+			sql.append(" WHERE idx = ? ");
+
+			PreparedStatement pstmt = con.prepareStatement(sql.toString());
+			pstmt.setInt(1, idx);
+			
+			pstmt.executeUpdate();
+			
+			pstmt.close();
+			con.close();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
 	public List<PhoneNumber> list() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			Connection con = ConnectionManager.getConnection();
+			
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT ");
+			sql.append("	idx, ");
+			sql.append("	name, ");
+			sql.append("	phone_number ");
+			sql.append("  FROM phonebook");
+			sql.append(" ORDER BY idx DESC ");
+
+			PreparedStatement pstmt = con.prepareStatement(sql.toString());
+			ResultSet rs = pstmt.executeQuery();
+			
+			List<PhoneNumber> list = new ArrayList<PhoneNumber>();
+			while (rs.next()) {
+				PhoneNumber item = new PhoneNumber();
+				item.setIdx(rs.getInt(1));
+				item.setName(rs.getString(2));
+				item.setPhoneNumber(rs.getString(3));
+				
+				list.add(item);
+			}
+			
+			rs.close();
+			pstmt.close();
+			con.close();
+			
+			return list;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public static void main(String[] args) {
