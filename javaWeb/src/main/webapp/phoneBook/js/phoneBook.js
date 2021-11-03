@@ -34,7 +34,13 @@ function doRegister() {
 	
 	$.post("register.do", param, function(response) {
 		console.log(response);
-		// TODO
+		if (response.resultCode == "Success") {
+			$(".registerLayer").hide();
+			
+			// TODO list 갱신
+		} else {
+			alert("등록에 실패했습니다. " + response.resultMessage);
+		}
 	});
 }
 
