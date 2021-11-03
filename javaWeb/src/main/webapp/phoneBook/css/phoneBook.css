@@ -35,6 +35,7 @@
 	left: 5rem; 
 	background-color: #EEE;
 	padding: 0.5rem;
+	display: none;
 }
 
 .registerLayer label {

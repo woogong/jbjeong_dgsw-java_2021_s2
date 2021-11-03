@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>전화번호부</title>
 
-<link rel="stylesheet" href="css/phoneBook.css">
+<link rel="stylesheet" href="css/phoneBook.css?1">
 
 </head>
 <body>
@@ -13,8 +13,8 @@
 		<h1>전화번호부</h1>
 	
 		<div class="btn">
-			<button>추가</button>
-			<button>삭제</button>
+			<button id="btn_register">추가</button>
+			<button id="btn_delete">삭제</button>
 		</div>
 		
 		<table class="list">
@@ -85,9 +85,9 @@
 				<label>전화번호</label>
 				<input type="text" name="phoneNumber">
 			</div>
-			<div>
-				<input type="button" value="등록">
-				<input type="button" value="닫기">
+			<div style="text-align: center; margin-top: 0.5rem">
+				<input type="button" value="등록" id="btn_save">
+				<input type="button" value="닫기" id="btn_close">
 			</div>
 		</div>
 
@@ -96,4 +96,13 @@
 	
 
 </body>
+
+<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+<script src="js/phoneBook.js"></script>
+
 </html>
+
+
+
+
+
