@@ -8,7 +8,7 @@ public class Executor {
 
 	public static void main(String[] args) {
 		try {
-			TcpServer server = TcpServerFactory.make(TcpServerFactory.NIO_NONBLOCKING_SERVER);
+			TcpServer server = TcpServerFactory.make(TcpServerFactory.SOCKET_SERVER);
 			
 			/* new Thread(new Runnable() {
 				

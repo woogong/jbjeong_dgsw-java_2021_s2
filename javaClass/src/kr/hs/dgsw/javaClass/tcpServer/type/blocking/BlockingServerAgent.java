@@ -100,6 +100,7 @@ public class BlockingServerAgent implements TcpSession {
 				while ((length = channel.read(byteBuffer)) >= 0) {
 					byteBuffer.flip();
 					byteBuffer.get(bytes, 0, length);
+					byteBuffer.clear();
 					
 					onReceive(bytes, length);
 				}
