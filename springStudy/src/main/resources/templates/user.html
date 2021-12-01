@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원</title>
+    <style>
+    	div {
+    		padding: 0.3rem;
+    	}
+    	
+    	label {
+    		display: inline-block;;
+    		width: 7rem;
+    		text-align: right;
+    		margin-right: 1rem;
+    	}
+    </style>
+</head>
+<body>
+    <h1>회원 정보</h1>
+	<div>
+	    <div>
+	    	<label>성명</label>
+	    	<span th:text="${user.name}"></span>
+	    </div>
+	    <div>
+	    	<label>생년월일</label>
+	    	<span th:text="${user.birthday}"></span>
+	    </div>
+	    <div>
+	    	<label>전화번호</label>
+	    	<span th:text="${user.phoneNumber}"></span>
+	    </div>
+	    <div>
+	    	<label>직업</label>
+	    	<span th:text="${user.job}"></span>
+	    </div>
+	</div>
+</body>
+</html>
